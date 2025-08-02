@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coordination Nationale Des Flambeaux- lumières CMA CI - Accueil Professionnel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        /* --- GLOBAL CSS VARIABLES --- */
+        :root {
+            --primary-color: #1A5319; /* A deep, rich dark green */
+            --secondary-color: #F8FBF8; /* A very light off-white/very light gray with a touch of green for the background */
+            --accent-color: #FFC107; /* Keeping the Gold Yellow for accents and CTAs */
+            --text-color: #2C3E2C; /* A darker gray-green for main text */
+            --light-text-color: #6B8B6B; /* A softer gray-green for secondary text */
+            --white: #ffffff; /* Pure white */
+            --darker-primary: #123C12; /* An even deeper green for hover states */
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --overlay-color: rgba(0, 0, 0, 0.7); /* Slightly darker overlay */
+            --dark-orange: #e0a800; /* Dark orange for CTA hover */
+            --admin-mode-bg: #e6ffe6; /* Light green for admin mode background */
+            --admin-mode-border: #4CAF50; /* Green border for admin controls */
+            --admin-button-add: #28a745; /* Green for add */
+            --admin-button-edit: #007bff; /* Blue for edit */
+            --admin-button-delete: #dc3545; /* Red for delete */
+            --admin-button-hover-add: #218838;
+            --admin-button-hover-edit: #0056b3;
+            --admin-button-hover-delete: #c82333;
+        }
+
+        /* --- BASE STYLES --- */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            overflow-x: hidden;
+            scroll-behavior: smooth; /* Smooth scroll for internal links */
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 0.8em;
+        }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- ADMIN MODE INDICATOR --- */
+        .admin-mode-indicator {
+            background-color: var(--admin-mode-border);
+            color: var(--white);
+            text-align: center;
+            padding: 8px 0;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 105; /* Above header */
+            display: none; /* Hidden by default */
+        }
+        body.admin-mode .admin-mode-indicator {
+            display: block;
+        }
+
+
+        /* --- HEADER (CLIENT MODE) --- */
+        header.client-header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between; /* Distributes items */
+            align-items: center;
+            box-shadow: 0 4px 10px var(--shadow-light);
+            position: relative;
+            z-index: 100;
+        }
+
+        header.client-header .header-left,
+        header.client-header .header-center,
+        header.client-header .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        header.client-header .header-left {
+            flex: 1; /* Takes available space on the left */
+            justify-content: flex-start; /* Aligns content to the start */
+            gap: 15px; /* Space between hamburger and logo */
+        }
+
+        header.client-header .header-center {
+            flex: 2; /* Takes more space for the name */
+            justify-content: center; /* Centers the name */
+        }
+
+        header.client-header .header-right {
+            flex: 1; /* Takes available space on the right */
+            justify-content: flex-end; /* Aligns content to the end */
+            gap: 15px; /* Space between logo and admin button */
+        }
+
+        header.client-header .logo {
+            height: 60px; /* Taille du logo principal */
+            width: auto;
+        }
+
+        header.client-header .logo-secondary {
+            height: 50px; /* Une taille légèrement plus petite pour le logo secondaire */
+            width: auto;
+            opacity: 0.8; /* Le rendre légèrement moins proéminent */
+            transition: opacity 0.3s ease;
+        }
+
+        header.client-header .logo-secondary:hover {
+            opacity: 1; /* Pleine opacité au survol */
+        }
+
+        header.client-header .company-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem; /* Adjusted for better fit on smaller screens */
+            font-weight: 700;
+            color: var(--white);
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            white-space: nowrap; /* Prevent name from wrapping */
+            text-align: center; /* Ensure text itself is centered */
+        }
+
+        /* Menu toggle (hamburger icon) */
+        .menu-toggle {
+            font-size: 2rem;
+            color: var(--white);
+            cursor: pointer;
+            z-index: 101; /* Ensure it's clickable */
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        /* Admin Mode Toggle Button in Header */
+        .admin-toggle-button {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            white-space: nowrap;
+        }
+
+        .admin-toggle-button:hover {
+            background-color: var(--dark-orange);
+            transform: translateY(-2px);
+        }
+
+        /* --- SIDE NAVIGATION (SIDENAV - HAMBURGER MENU) --- */
+        .sidenav {
+            height: 100%;
+            width: 0; /* Hidden by default */
+            position: fixed;
+            z-index: 102;
+            top: 0;
+            left: 0;
+            background-color: var(--primary-color);
+            overflow-x: hidden;
+            transition: 0.5s ease-in-out;
+            padding-top: 80px;
+            box-shadow: 4px 0 15px var(--shadow-light);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidenav-links {
+            flex-grow: 1; /* Pousse les liens vers le bas */
+        }
+
+        .sidenav a {
+            padding: 15px 32px;
+            text-decoration: none;
+            font-size: 1.5rem;
+            color: var(--white);
+            display: block;
+            transition: 0.3s ease-in-out;
+            font-weight: 500;
+        }
+
+        .sidenav a:hover {
+            color: var(--accent-color);
+            background-color: var(--darker-primary);
+            padding-left: 40px;
+        }
+        
+        .sidenav .admin-controls-sidenav {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+        .sidenav-links .admin-item-controls {
+            position: relative;
+            background-color: transparent;
+            box-shadow: none;
+            padding: 0;
+            top: 0;
+            right: 0;
+        }
+        .sidenav-links .admin-item-controls .admin-button {
+            background: rgba(255,255,255,0.1);
+        }
+        .sidenav-links a:hover .admin-item-controls .admin-button {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .sidenav .closebtn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2.5rem;
+            margin-left: 0;
+            color: var(--white);
+        }
+
+        .sidenav .closebtn:hover {
+            color: var(--accent-color);
+            transform: rotate(90deg);
+        }
+
+        /* Overlay when side nav is open */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--overlay-color);
+            z-index: 101;
+            display: none;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* --- MARQUEE/SCROLLING BANNER (FLASH INFO) --- */
+        .marquee-banner {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            padding: 10px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky; /* Sticky position so it stays on top when scrolling */
+            top: 0;
+            width: 100%;
+            z-index: 101; /* Above header (z-index 100) */
+            display: flex; /* Use flex to center content and control */
+            align-items: center;
+            justify-content: center; /* Center content by default */
+            gap: 15px; /* Space between text and admin button in admin mode */
+        }
+        /* Adjust marquee top if admin indicator is present */
+        body.admin-mode .marquee-banner {
+            top: 40px; /* Below the admin indicator */
+            z-index: 99;
+        }
+        /* Adjust header to be below the marquee in client mode */
+        body:not(.admin-mode) header.client-header {
+            margin-top: 50px; /* Approx height of marquee banner */
+            position: relative; /* Ensure it respects margin-top */
+            z-index: 100; /* Still above content */
+        }
+        body.admin-mode .marquee-banner {
+            top: 40px; /* Below the admin indicator */
+            z-index: 99;
+        }
+
+        /* Ensure the admin button inside the marquee is hidden in client mode */
+        body:not(.admin-mode) .marquee-banner .admin-controls {
+            display: none !important;
+        }
+
+        body.admin-mode .marquee-banner .marquee-content {
+            animation: none !important; /* Disable animation in admin mode */
+            padding-left: 0 !important; /* No need for off-screen start */
+            white-space: normal !important; /* Allow text to wrap for easier editing */
+            flex-grow: 1; /* Allow content to take up space */
+            text-align: center;
+            display: block; /* Ensure it breaks line if wrapped */
+            width: auto; /* Allow width to be determined by content */
+        }
+
+        body.admin-mode .marquee-banner span {
+            font-size: 1.1em; /* Maintain font size */
+            padding-right: 20px; /* Space before the edit button */
+            display: inline-block; /* Ensure span respects padding */
+            white-space: normal; /* Allow wrapping */
+        }
+
+        body.admin-mode header.client-header {
+            margin-top: 0; /* No extra margin in admin mode as marquee is sticky */
+        }
+
+        .marquee-banner .marquee-content {
+            display: inline-block;
+            animation: marquee 30s linear infinite; /* Adjust duration as needed */
+            padding-left: 100%; /* Start off-screen to the right */
+            font-weight: 600;
+            font-size: 1.1em;
+            position: relative; /* To contain admin button */
+            flex-shrink: 0; /* Prevent content from shrinking */
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Pause marquee on hover */
+        .marquee-banner:hover .marquee-content {
+            animation-play-state: paused;
+        }
+        .marquee-banner .admin-controls {
+            position: static;
+        }
+
+        /* --- GENERAL CONTENT SECTIONS --- */
+        .hero-section {
+            background: linear-gradient(rgba(26, 83, 25, 0.7), rgba(26, 83, 25, 0.7)), url('https://picsum.photos/1920/600/?random=1') no-repeat center center/cover;
+            color: var(--white);
+            text-align: center;
+            padding: 120px 20px;
+            position: relative;
+            z-index: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 500px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+        }
+        /* Adjust hero section to start below header in client mode */
+        body:not(.admin-mode) .hero-section {
+            padding-top: 80px; /* Adjust if needed to clear header and marquee */
+            position: relative;
+            z-index: 0;
+        }
+
+        .hero-section h1 {
+            font-size: 3.8rem;
+            margin-bottom: 25px;
+            color: var(--white);
+        }
+
+        .hero-section p {
+            font-size: 1.4rem;
+            max-width: 900px;
+            margin: 0 auto 40px auto;
+            color: var(--white);
+        }
+
+        .cta-button {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .cta-button:hover {
+            background-color: var(--dark-orange);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .content-section {
+            padding: 60px 25px;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            display: none; /* Hidden by default */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            position: relative; /* For admin controls positioning */
+        }
+
+        .content-section.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Admin Mode styling for sections */
+        body.admin-mode .content-section {
+            background-color: var(--admin-mode-bg);
+            border: 2px dashed var(--admin-mode-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        body.admin-mode .hero-section {
+            border: 2px dashed var(--admin-mode-border);
+            background-image: linear-gradient(rgba(26, 83, 25, 0.7), rgba(26, 83, 25, 0.7)), url('https://picsum.photos/1920/600/?random=1') !important;
+        }
+
+        .content-section h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            font-size: 2.5rem;
+        }
+
+        .content-section h2::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .content-section img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain; /* Professional auto-framing */
+        }
+
+        .content-section img.logo,
+        .content-section .publication-item img,
+        .content-section .activity-card img,
+        .content-section .news-ad-card img {
+            max-width: 100%;
+            height: auto;
+            object-fit: cover; /* Professional auto-framing */
+            display: block;
+            margin: 0;
+        }
+
+        /* --- ADMIN CONTROLS --- */
+        .admin-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+        /* Hide admin controls by default, show only in admin mode */
+        .admin-controls, .admin-item-controls {
+            display: none;
+        }
+        body.admin-mode .admin-controls, body.admin-mode .admin-item-controls {
+            display: flex;
+        }
+        
+        .admin-controls-header {
+            position: static;
+        }
+
+        .admin-button {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .admin-button.add { background-color: var(--admin-button-add); color: var(--white); }
+        .admin-button.edit { background-color: var(--admin-button-edit); color: var(--white); }
+        .admin-button.delete { background-color: var(--admin-button-delete); color: var(--white); }
+
+        .admin-button.add:hover { background-color: var(--admin-button-hover-add); }
+        .admin-button.edit:hover { background-color: var(--admin-button-hover-edit); }
+        .admin-button.delete:hover { background-color: var(--admin-button-hover-delete); }
+
+        /* Item-specific controls (e.g., on cards) */
+        .admin-item-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            gap: 5px;
+        }
+        .admin-item-controls .admin-button {
+            padding: 5px 8px;
+            font-size: 0.8em;
+        }
+
+        /* Animation légère pour les éléments en mode admin */
+        body.admin-mode .news-ad-card,
+        body.admin-mode .gallery-item,
+        body.admin-mode .swiper-slide.video-slide,
+        body.admin-mode .swiper-slide.activity-card,
+        body.admin-mode .publication-item,
+        body.admin-mode .advertisement-item {
+            cursor: pointer; /* Indique qu'ils sont cliquables pour édition */
+            transition: all 0.2s ease-in-out; /* Doubler la transition pour plus de fluidité */
+        }
+
+        body.admin-mode .news-ad-card:hover,
+        body.admin-mode .gallery-item:hover,
+        body.admin-mode .swiper-slide.video-slide:hover,
+        body.admin-mode .swiper-slide.activity-card:hover,
+        body.admin-mode .publication-item:hover,
+        body.admin-mode .advertisement-item:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25); /* Ombre plus prononcée */
+            transform: translateY(-8px) scale(1.01); /* Légère élévation et agrandissement */
+            border-color: var(--accent-color); /* Bordure accentuée au survol */
+        }
+
+        /* Visibilité des contrôles d'édition individuels au survol en mode admin */
+        body.admin-mode .news-ad-card .admin-item-controls,
+        body.admin-mode .gallery-item .admin-item-controls,
+        body.admin-mode .swiper-slide.video-slide .admin-item-controls,
+        body.admin-mode .swiper-slide.activity-card .admin-item-controls,
+        body.admin-mode .publication-item .admin-item-controls,
+        body.admin-mode .advertisement-item .admin-item-controls {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        body.admin-mode .news-ad-card:hover .admin-item-controls,
+        body.admin-mode .gallery-item:hover .admin-item-controls,
+        body.admin-mode .swiper-slide.video-slide:hover .admin-item-controls,
+        body.admin-mode .swiper-slide.activity-card:hover .admin-item-controls,
+        body.admin-mode .publication-item:hover .admin-item-controls,
+        body.admin-mode .advertisement-item:hover .admin-item-controls {
+            opacity: 1;
+        }
+
+        /* --- MODAL STYLES --- */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 200; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(-50px);
+            transition: transform 0.3s ease-in-out;
+        }
+        .modal.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-button {
+            color: var(--light-text-color);
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-content h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .modal-content input[type="text"],
+        .modal-content input[type="url"],
+        .modal-content textarea,
+        .modal-content input[type="password"],
+        .modal-content input[type="file"] { /* Added for password and file field */
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .modal-content textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-content button.save-button {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        .modal-content button.save-button:hover {
+            background-color: var(--darker-primary);
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* --- HOME SECTION: NEWS & ANNOUNCEMENTS (CAROUSEL) --- */
+        .news-ads-section {
+            margin-top: 60px;
+            padding: 60px 25px;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            position: relative; /* For admin controls positioning */
+        }
+        .news-ads-section h2 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            font-size: 2.5rem;
+        }
+        .news-ads-section h2::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background-color: var(--accent-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .news-ads-carousel {
+            width: 100%;
+            padding-bottom: 60px; /* Space for pagination */
+        }
+
+        .news-ad-card {
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            min-height: 350px;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            position: relative; /* For admin controls */
+        }
+        body.admin-mode .news-ad-card {
+            border: 1px solid var(--admin-mode-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+
+        .news-ad-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .news-ad-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--accent-color);
+        }
+
+        .news-ad-card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .news-ad-card-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .news-ad-card-content h3 a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+        .news-ad-card-content h3 a:hover {
+            color: var(--accent-color);
+        }
+
+
+        .news-ad-card-content p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+
+        /* --- GALLERY (SERVICES) --- */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .gallery-item {
+            background-color: var(--white);
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            position: relative; /* For admin controls */
+        }
+        body.admin-mode .gallery-item {
+            border: 1px solid var(--admin-mode-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .gallery-item-info {
+            padding: 20px;
+        }
+
+        .gallery-item-info h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .gallery-item-info h3 a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+        .gallery-item-info h3 a:hover {
+            color: var(--accent-color);
+        }
+
+
+        .gallery-item-info p {
+            font-size: 1rem;
+            color: var(--light-text-color);
+            line-height: 1.5;
+        }
+        .no-content-message {
+            text-align: center;
+            color: var(--light-text-color);
+            padding: 40px 0;
+            font-size: 1.1rem;
+        }
+
+        /* --- VIDEO SECTION (CAROUSEL) --- */
+        .video-section {
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .video-carousel-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 25px auto 0;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: black;
+            padding-bottom: 60px; /* Space for pagination */
+            position: relative;
+        }
+
+        .video-slide {
+            padding: 20px;
+            text-align: center;
+            background-color: var(--white);
+            border-radius: 12px;
+            position: relative; /* For admin controls */
+        }
+        body.admin-mode .swiper-slide.video-slide {
+            border: 1px solid var(--admin-mode-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        .video-slide h3 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .video-slide h3 a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+        .video-slide h3 a:hover {
+            color: var(--accent-color);
+        }
+
+        .video-slide .video-responsive {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            background-color: black;
+            border-radius: 8px;
+        }
+        .video-slide .video-responsive iframe,
+        .video-slide .video-responsive video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* --- ACTIVITIES PROGRAM SECTION (CAROUSEL) --- */
+        .activities-section {
+            margin-top: 60px;
+        }
+
+        .activities-carousel {
+            width: 100%;
+            height: auto;
+            padding-bottom: 60px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .swiper-slide .activity-card {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        body.admin-mode .swiper-slide.activity-card {
+            border: 1px solid var(--admin-mode-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .activity-card-image {
+            height: 250px;
+            overflow: hidden;
+        }
+        .activity-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease-in-out;
+        }
+        .activity-card-image:hover img {
+            transform: scale(1.1);
+        }
+        .activity-card-content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        .activity-card-content h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .activity-card-content p {
+            font-size: 1rem;
+            color: var(--text-color);
+            line-height: 1.6;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .activity-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px 20px;
+            font-size: 0.9rem;
+            color: var(--light-text-color);
+        }
+
+        .activity-card-footer .location,
+        .activity-card-footer .date {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- PUBLICATIONS SECTION (GRID) --- */
+        .publications-section {
+            padding: 60px 25px;
+            max-width: 1200px;
+            margin: 30px auto;
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+            position: relative; /* For admin controls */
+        }
+        body.admin-mode .publications-section {
+            background-color: var(--admin-mode-bg);
+            border: 2px dashed var(--admin-mode-border);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .publications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .publication-item {
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-light);
+            position: relative; /* For admin controls */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+        }
+        body.admin-mode .publication-item {
+            border: 1px solid var(--admin-mode-border);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        .publication-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .publication-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--accent-color);
+        }
+        .publication-item-content {
+            padding: 20px;
+        }
+        .publication-item-content h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .publication-item-content p {
+            font-size: 1rem;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .publication-item-content a.read-more {
+            display: inline-block;
+            margin-top: 15px;
+            color: var(--accent-color);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .publication-item-content a.read-more:hover {
+            color: var(--dark-orange);
+            text-decoration: underline;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 60px 25px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+        .footer-logo img {
+            height: 80px;
+            width: auto;
+        }
+
+        .footer-links {
+            margin-bottom: 30px;
+        }
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: var(--accent-color);
+        }
+
+        .social-media a {
+            color: var(--white);
+            font-size: 1.8rem;
+            margin: 0 10px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+        .social-media a:hover {
+            color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* --- SWIPER NAVIGATION & PAGINATION --- */
+        .swiper-button-next,
+        .swiper-button-prev {
+            color: var(--primary-color) !important;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        .swiper-button-next:hover,
+        .swiper-button-prev:hover {
+            opacity: 1;
+        }
+        .swiper-pagination-bullet-active {
+            background-color: var(--primary-color) !important;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 992px) {
+            header.client-header {
+                flex-wrap: wrap;
+                padding: 1rem 1.5rem;
+            }
+            header.client-header .header-left,
+            header.client-header .header-center,
+            header.client-header .header-right {
+                flex-basis: 100%;
+                justify-content: center;
+            }
+            header.client-header .header-left {
+                justify-content: space-between;
+                flex-basis: auto;
+            }
+            header.client-header .header-center {
+                margin-top: 10px;
+                order: 3; /* Move to bottom */
+            }
+            header.client-header .header-right {
+                justify-content: flex-end;
+                flex-basis: auto;
+            }
+            header.client-header .company-name {
+                font-size: 1.2rem;
+            }
+            .hero-section h1 {
+                font-size: 2.5rem;
+            }
+            .hero-section p {
+                font-size: 1.2rem;
+            }
+            .content-section {
+                padding: 40px 15px;
+            }
+            .content-section h2 {
+                font-size: 2rem;
+            }
+            .gallery-item img {
+                height: 180px;
+            }
+            .video-slide h3 {
+                font-size: 1.5rem;
+            }
+            .footer-links a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="admin-mode-indicator">
+        Mode Administrateur activé. Le contenu est éditable.
+    </div>
+
+    <header class="client-header" id="main-header">
+        <div class="header-left">
+            <span class="menu-toggle" onclick="openNav()">☰</span>
+            <img src="https://picsum.photos/100/100/?random=1" alt="Logo Flambeaux" class="logo" id="main-logo">
+        </div>
+        <div class="header-center">
+            <h1 class="company-name">Coordination Nationale Des Flambeaux- lumières CMA CI</h1>
+        </div>
+        <div class="header-right">
+            <img src="https://picsum.photos/100/100/?random=2" alt="Logo CMA CI" class="logo-secondary" id="secondary-logo">
+            <button class="admin-toggle-button" id="admin-mode-toggle">Mode Admin</button>
+        </div>
+        <div class="admin-controls" data-target="main-header">
+            <button class="admin-button edit" onclick="editContent('main-header')"><i class="fas fa-edit"></i></button>
+        </div>
+    </header>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <div class="sidenav-links">
+            <a href="#hero-section">Accueil</a>
+            <a href="#about-us-section">À Propos</a>
+            <a href="#news-ads-section">Actualités</a>
+            <a href="#gallery-section">Galerie</a>
+            <a href="#video-section">Vidéos</a>
+            <a href="#activities-section">Activités</a>
+            <a href="#publications-section">Publications</a>
+            <a href="#contact-section">Contact</a>
+        </div>
+    </div>
+
+    <div class="overlay" onclick="closeNav()"></div>
+
+    <div class="marquee-banner" id="marquee-banner">
+        <span class="marquee-content" id="marquee-text">
+            Bienvenue sur le site de la Coordination Nationale ! Suivez nos dernières actualités et événements. - Message d'information important pour tous les membres !
+        </span>
+        <div class="admin-controls" data-target="marquee-banner">
+            <button class="admin-button edit" onclick="editContent('marquee-banner')"><i class="fas fa-edit"></i></button>
+        </div>
+    </div>
+
+    <section id="hero-section" class="hero-section">
+        <div class="admin-controls" data-target="hero-section">
+            <button class="admin-button edit" onclick="editContent('hero-section')"><i class="fas fa-edit"></i></button>
+        </div>
+        <h1 id="hero-title">Bâtir un avenir lumineux</h1>
+        <p id="hero-text">
+            En tant que jeunes ambassadeurs du Christ, nous sommes des flambeaux de lumière, 
+            éclairant les nations avec la vérité de l'Évangile.
+        </p>
+        <a href="#about-us-section" class="cta-button">En savoir plus sur nous</a>
+    </section>
+    
+    <section id="about-us-section" class="content-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="about-us-section">
+            <button class="admin-button edit" onclick="editContent('about-us-section')"><i class="fas fa-edit"></i></button>
+        </div>
+        <h2 id="about-title">Notre Mission et Nos Valeurs</h2>
+        <p id="about-text">
+            La Coordination Nationale des Flambeaux-lumières CMA CI a pour mission de former la jeunesse
+            à devenir des leaders chrétiens inspirants, enracinés dans les valeurs bibliques. Nous croyons
+            en la puissance de l'unité, du service et de l'amour pour transformer la société ivoirienne.
+            Nos activités visent à développer le potentiel de chaque jeune, en faisant de lui un
+            véritable flambeau pour son entourage et sa nation.
+        </p>
+    </section>
+
+    <section id="news-ads-section" class="news-ads-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="news-ads-section">
+            <button class="admin-button add" onclick="addItem('news-ads')"><i class="fas fa-plus"></i> Ajouter</button>
+        </div>
+        <h2>Actualités et Annonces</h2>
+        <div class="swiper news-ads-carousel">
+            <div class="swiper-wrapper" id="news-ads-list">
+                <div class="swiper-slide news-ad-card" data-item-id="1">
+                    <img src="https://picsum.photos/400/200/?random=3" alt="Célébration" loading="lazy">
+                    <div class="news-ad-card-content">
+                        <h3><a href="#">Grande Célébration Annuelle</a></h3>
+                        <p>Rejoignez-nous pour notre grande célébration annuelle de la jeunesse ! Au programme : louange, prédication, et moments de partage.</p>
+                    </div>
+                    <div class="admin-item-controls">
+                        <button class="admin-button edit" onclick="editItem('news-ads', '1')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-button delete" onclick="deleteItem('news-ads', '1')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="swiper-slide news-ad-card" data-item-id="2">
+                    <img src="https://picsum.photos/400/200/?random=4" alt="Formation" loading="lazy">
+                    <div class="news-ad-card-content">
+                        <h3><a href="#">Nouvelle session de formation de leaders</a></h3>
+                        <p>Découvrez notre programme intensif de formation pour les futurs leaders. Inscrivez-vous dès maintenant et construisez votre avenir.</p>
+                    </div>
+                    <div class="admin-item-controls">
+                        <button class="admin-button edit" onclick="editItem('news-ads', '2')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-button delete" onclick="deleteItem('news-ads', '2')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="swiper-slide news-ad-card" data-item-id="3">
+                    <img src="https://picsum.photos/400/200/?random=5" alt="Service communautaire" loading="lazy">
+                    <div class="news-ad-card-content">
+                        <h3><a href="#">Campagne de service communautaire</a></h3>
+                        <p>Nous lançons notre campagne annuelle de service pour la communauté. Venez apporter votre aide et votre amour !</p>
+                    </div>
+                    <div class="admin-item-controls">
+                        <button class="admin-button edit" onclick="editItem('news-ads', '3')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-button delete" onclick="deleteItem('news-ads', '3')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </section>
+
+    <section id="gallery-section" class="content-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="gallery">
+            <button class="admin-button add" onclick="addItem('gallery')"><i class="fas fa-plus"></i> Ajouter</button>
+        </div>
+        <h2>Notre Galerie</h2>
+        <div class="gallery" id="gallery-list">
+            <div class="gallery-item" data-item-id="1">
+                <img src="https://picsum.photos/400/300/?random=6" alt="Service 1" loading="lazy">
+                <div class="gallery-item-info">
+                    <h3>Service de Louange</h3>
+                    <p>Un moment puissant de louange et d'adoration, animé par notre équipe dynamique.</p>
+                </div>
+                <div class="admin-item-controls">
+                    <button class="admin-button edit" onclick="editItem('gallery', '1')"><i class="fas fa-edit"></i></button>
+                    <button class="admin-button delete" onclick="deleteItem('gallery', '1')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="gallery-item" data-item-id="2">
+                <img src="https://picsum.photos/400/300/?random=7" alt="Service 2" loading="lazy">
+                <div class="gallery-item-info">
+                    <h3>Formation Biblique</h3>
+                    <p>Des enseignements profonds pour grandir dans la connaissance de la Parole de Dieu.</p>
+                </div>
+                <div class="admin-item-controls">
+                    <button class="admin-button edit" onclick="editItem('gallery', '2')"><i class="fas fa-edit"></i></button>
+                    <button class="admin-button delete" onclick="deleteItem('gallery', '2')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="gallery-item" data-item-id="3">
+                <img src="https://picsum.photos/400/300/?random=8" alt="Service 3" loading="lazy">
+                <div class="gallery-item-info">
+                    <h3>Atelier de Leadership</h3>
+                    <p>Des ateliers pratiques pour équiper la prochaine génération de leaders.</p>
+                </div>
+                <div class="admin-item-controls">
+                    <button class="admin-button edit" onclick="editItem('gallery', '3')"><i class="fas fa-edit"></i></button>
+                    <button class="admin-button delete" onclick="deleteItem('gallery', '3')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="video-section" class="content-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="video-section">
+            <button class="admin-button add" onclick="addItem('video')"><i class="fas fa-plus"></i> Ajouter</button>
+        </div>
+        <h2>Vidéos</h2>
+        <div class="video-carousel-container">
+            <div class="swiper video-carousel">
+                <div class="swiper-wrapper" id="video-list">
+                    <div class="swiper-slide video-slide" data-item-id="1">
+                        <h3><a href="http://youtube.com" target="_blank">Conférence 2024 : Le Réveil</a></h3>
+                        <div class="video-responsive">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="admin-item-controls">
+                            <button class="admin-button edit" onclick="editItem('video', '1')"><i class="fas fa-edit"></i></button>
+                            <button class="admin-button delete" onclick="deleteItem('video', '1')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                    <div class="swiper-slide video-slide" data-item-id="2">
+                        <h3><a href="http://youtube.com" target="_blank">Témoignages Puissants</a></h3>
+                        <div class="video-responsive">
+                            <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="admin-item-controls">
+                            <button class="admin-button edit" onclick="editItem('video', '2')"><i class="fas fa-edit"></i></button>
+                            <button class="admin-button delete" onclick="deleteItem('video', '2')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="activities-section" class="content-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="activities-section">
+            <button class="admin-button add" onclick="addItem('activities')"><i class="fas fa-plus"></i> Ajouter</button>
+        </div>
+        <h2>Nos Prochaines Activités</h2>
+        <div class="swiper activities-carousel">
+            <div class="swiper-wrapper" id="activities-list">
+                <div class="swiper-slide activity-card" data-item-id="1">
+                    <div class="activity-card-image">
+                        <img src="https://picsum.photos/500/400/?random=9" alt="Retraite Spirituelle" loading="lazy">
+                    </div>
+                    <div class="activity-card-content">
+                        <h3>Retraite Spirituelle Annuelle</h3>
+                        <p>Une retraite de trois jours pour se reconnecter avec Dieu dans un cadre paisible et ressourçant.</p>
+                        <div class="activity-card-footer">
+                            <span class="location"><i class="fas fa-map-marker-alt"></i> Grand-Bassam</span>
+                            <span class="date"><i class="fas fa-calendar-alt"></i> 15-17 Septembre 2025</span>
+                        </div>
+                    </div>
+                    <div class="admin-item-controls">
+                        <button class="admin-button edit" onclick="editItem('activities', '1')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-button delete" onclick="deleteItem('activities', '1')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <div class="swiper-slide activity-card" data-item-id="2">
+                    <div class="activity-card-image">
+                        <img src="https://picsum.photos/500/400/?random=10" alt="Séminaire de Formation" loading="lazy">
+                    </div>
+                    <div class="activity-card-content">
+                        <h3>Séminaire de Formation</h3>
+                        <p>Séminaire de renforcement des capacités en gestion de projet et leadership pour nos jeunes membres.</p>
+                        <div class="activity-card-footer">
+                            <span class="location"><i class="fas fa-map-marker-alt"></i> Abidjan</span>
+                            <span class="date"><i class="fas fa-calendar-alt"></i> 25 Octobre 2025</span>
+                        </div>
+                    </div>
+                    <div class="admin-item-controls">
+                        <button class="admin-button edit" onclick="editItem('activities', '2')"><i class="fas fa-edit"></i></button>
+                        <button class="admin-button delete" onclick="deleteItem('activities', '2')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </section>
+
+    <section id="publications-section" class="publications-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="publications">
+            <button class="admin-button add" onclick="addItem('publications')"><i class="fas fa-plus"></i> Ajouter</button>
+        </div>
+        <h2>Nos Publications</h2>
+        <div class="publications-grid" id="publications-list">
+            <div class="publication-item" data-item-id="1">
+                <img src="https://picsum.photos/400/200/?random=11" alt="Article 1" loading="lazy">
+                <div class="publication-item-content">
+                    <h3>Comment devenir un leader</h3>
+                    <p>Un guide pratique pour développer vos compétences en leadership inspiré par la foi.</p>
+                    <a href="#" class="read-more">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="admin-item-controls">
+                    <button class="admin-button edit" onclick="editItem('publications', '1')"><i class="fas fa-edit"></i></button>
+                    <button class="admin-button delete" onclick="deleteItem('publications', '1')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+            <div class="publication-item" data-item-id="2">
+                <img src="https://picsum.photos/400/200/?random=12" alt="Article 2" loading="lazy">
+                <div class="publication-item-content">
+                    <h3>La puissance de la prière</h3>
+                    <p>Découvrez comment la prière peut transformer votre vie et celle de votre communauté.</p>
+                    <a href="#" class="read-more">Lire la suite <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="admin-item-controls">
+                    <button class="admin-button edit" onclick="editItem('publications', '2')"><i class="fas fa-edit"></i></button>
+                    <button class="admin-button delete" onclick="deleteItem('publications', '2')"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact-section" class="content-section active animate__animated animate__fadeInUp">
+        <div class="admin-controls" data-target="contact-section">
+            <button class="admin-button edit" onclick="editContent('contact-section')"><i class="fas fa-edit"></i></button>
+        </div>
+        <h2 id="contact-title">Nous contacter</h2>
+        <p id="contact-text">
+            Pour toute question ou information, n'hésitez pas à nous contacter. Nous serons ravis de vous répondre.
+        </p>
+        <div class="contact-details">
+            <p><strong>Email :</strong> <a href="mailto:info@cma-ci.org" id="contact-email">info@cma-ci.org</a></p>
+            <p><strong>Téléphone :</strong> <a href="tel:+2250102030405" id="contact-phone">+225 01 02 03 04 05</a></p>
+            <p><strong>Adresse :</strong> <span id="contact-address">Abidjan, Côte d'Ivoire</span></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="https://picsum.photos/100/100/?random=13" alt="Logo Footer" class="logo">
+            </div>
+            <div class="footer-links">
+                <a href="#about-us-section">À Propos</a>
+                <a href="#activities-section">Activités</a>
+                <a href="#contact-section">Contact</a>
+                <a href="#publications-section">Publications</a>
+            </div>
+            <div class="social-media">
+                <a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Coordination Nationale Des Flambeaux- lumières CMA CI. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div id="admin-login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h3>Mode Administrateur</h3>
+            <form id="admin-login-form">
+                <label for="admin-password">Entrez le mot de passe :</label>
+                <input type="password" id="admin-password" name="password" required>
+                <p id="password-error" style="color: red; display: none;">Mot de passe incorrect.</p>
+                <button type="submit" class="save-button">Valider</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="edit-content-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">×</span>
+            <h3 id="modal-title">Modifier le Contenu</h3>
+            <form id="edit-content-form">
+                <button type="submit" class="save-button">Enregistrer les modifications</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+    <script>
+        // --- Admin Mode Logic ---
+        const ADMIN_PASSWORD = "454101";
+        const adminToggleBtn = document.getElementById('admin-mode-toggle');
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const adminLoginForm = document.getElementById('admin-login-form');
+        const passwordInput = document.getElementById('admin-password');
+        const passwordError = document.getElementById('password-error');
+        const editContentModal = document.getElementById('edit-content-modal');
+        const editContentForm = document.getElementById('edit-content-form');
+        let currentEditingTarget = null;
+        let currentEditingItem = null;
+
+        adminToggleBtn.addEventListener('click', () => {
+            if (document.body.classList.contains('admin-mode')) {
+                // Exit admin mode
+                document.body.classList.remove('admin-mode');
+                adminToggleBtn.textContent = 'Mode Admin';
+                adminToggleBtn.style.backgroundColor = 'var(--accent-color)';
+                adminToggleBtn.style.color = 'var(--primary-color)';
+            } else {
+                // Show login modal
+                adminLoginModal.classList.add('active');
+            }
+        });
+
+        adminLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                document.body.classList.add('admin-mode');
+                adminLoginModal.classList.remove('active');
+                adminToggleBtn.textContent = 'Quitter Admin';
+                adminToggleBtn.style.backgroundColor = 'var(--admin-button-delete)';
+                adminToggleBtn.style.color = 'var(--white)';
+                passwordInput.value = '';
+                passwordError.style.display = 'none';
+                alert('Mode Administrateur activé.');
+            } else {
+                passwordError.style.display = 'block';
+            }
+        });
+
+        // Close modal when clicking on the close button or outside the modal
+        document.querySelectorAll('.modal .close-button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.closest('.modal').classList.remove('active');
+            });
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.classList.remove('active');
+            }
+        });
+
+        // --- Side Nav Logic ---
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "300px";
+            document.querySelector(".overlay").style.display = "block";
+        }
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.querySelector(".overlay").style.display = "none";
+        }
+
+        // --- Content Editing Functions (Simplified for demonstration) ---
+        function editContent(targetId) {
+            currentEditingTarget = targetId;
+            const targetElement = document.getElementById(targetId);
+            const form = document.getElementById('edit-content-form');
+            form.innerHTML = ''; // Clear existing form
+
+            let modalTitle = 'Modifier le Contenu';
+            let fieldsHtml = '';
+
+            switch(targetId) {
+                case 'main-header':
+                    modalTitle = 'Modifier l\'en-tête et les logos';
+                    fieldsHtml = `
+                        <label for="company-name-input">Nom de l'entreprise :</label>
+                        <input type="text" id="company-name-input" name="company-name" value="${document.querySelector('.company-name').textContent.trim()}">
+                        <label for="main-logo-input">URL du logo principal :</label>
+                        <input type="url" id="main-logo-input" name="main-logo" value="${document.getElementById('main-logo').src}">
+                        <label for="secondary-logo-input">URL du logo secondaire :</label>
+                        <input type="url" id="secondary-logo-input" name="secondary-logo" value="${document.getElementById('secondary-logo').src}">
+                    `;
+                    break;
+                case 'marquee-banner':
+                    modalTitle = 'Modifier la Bande Défilante';
+                    fieldsHtml = `
+                        <label for="marquee-text-input">Texte de la bande :</label>
+                        <textarea id="marquee-text-input" name="text">${targetElement.querySelector('.marquee-content').textContent.trim()}</textarea>
+                    `;
+                    break;
+                case 'hero-section':
+                    modalTitle = 'Modifier la Section Héro';
+                    const heroBackgroundUrl = targetElement.style.backgroundImage.match(/url\("?(.+?)"?\)/);
+                    const currentHeroImageUrl = heroBackgroundUrl ? heroBackgroundUrl[1] : '';
+                    fieldsHtml = `
+                        <label for="hero-title-input">Titre :</label>
+                        <input type="text" id="hero-title-input" name="title" value="${document.getElementById('hero-title').textContent.trim()}">
+                        <label for="hero-text-input">Paragraphe :</label>
+                        <textarea id="hero-text-input" name="text">${document.getElementById('hero-text').textContent.trim()}</textarea>
+                        <label for="hero-image-input">URL de l'image de fond :</label>
+                        <input type="url" id="hero-image-input" name="image" value="${currentHeroImageUrl}">
+                    `;
+                    break;
+                case 'about-us-section':
+                    modalTitle = 'Modifier la Section À Propos';
+                    fieldsHtml = `
+                        <label for="about-title-input">Titre :</label>
+                        <input type="text" id="about-title-input" name="title" value="${document.getElementById('about-title').textContent.trim()}">
+                        <label for="about-text-input">Texte :</label>
+                        <textarea id="about-text-input" name="text">${document.getElementById('about-text').textContent.trim()}</textarea>
+                    `;
+                    break;
+                case 'contact-section':
+                    modalTitle = 'Modifier la Section Contact';
+                    fieldsHtml = `
+                        <label for="contact-title-input">Titre :</label>
+                        <input type="text" id="contact-title-input" name="title" value="${document.getElementById('contact-title').textContent.trim()}">
+                        <label for="contact-text-input">Texte d'introduction :</label>
+                        <textarea id="contact-text-input" name="text">${document.getElementById('contact-text').textContent.trim()}</textarea>
+                        <label for="contact-email-input">Email :</label>
+                        <input type="text" id="contact-email-input" name="email" value="${document.getElementById('contact-email').textContent.trim()}">
+                        <label for="contact-phone-input">Téléphone :</label>
+                        <input type="text" id="contact-phone-input" name="phone" value="${document.getElementById('contact-phone').textContent.trim()}">
+                        <label for="contact-address-input">Adresse :</label>
+                        <input type="text" id="contact-address-input" name="address" value="${document.getElementById('contact-address').textContent.trim()}">
+                    `;
+                    break;
+                default:
+                    // Fallback for general sections
+                    const h2Text = targetElement.querySelector('h2') ? targetElement.querySelector('h2').textContent.trim() : '';
+                    const pText = targetElement.querySelector('p') ? targetElement.querySelector('p').textContent.trim() : '';
+                    fieldsHtml = `
+                        <label for="general-title-input">Titre :</label>
+                        <input type="text" id="general-title-input" name="title" value="${h2Text}">
+                        <label for="general-text-input">Paragraphe :</label>
+                        <textarea id="general-text-input" name="text">${pText}</textarea>
+                    `;
+            }
+
+            document.getElementById('modal-title').textContent = modalTitle;
+            form.innerHTML = fieldsHtml + '<button type="submit" class="save-button">Enregistrer les modifications</button>';
+            editContentModal.classList.add('active');
+
+            // Handle form submission
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                if (targetId === 'main-header') {
+                    document.querySelector('.company-name').textContent = formData.get('company-name');
+                    document.getElementById('main-logo').src = formData.get('main-logo');
+                    document.getElementById('secondary-logo').src = formData.get('secondary-logo');
+                } else if (targetId === 'marquee-banner') {
+                    document.getElementById('marquee-text').textContent = formData.get('text');
+                } else if (targetId === 'hero-section') {
+                    document.getElementById('hero-title').textContent = formData.get('title');
+                    document.getElementById('hero-text').textContent = formData.get('text');
+                    const newImageUrl = formData.get('image');
+                    if (newImageUrl) {
+                        targetElement.style.backgroundImage = `linear-gradient(rgba(26, 83, 25, 0.7), rgba(26, 83, 25, 0.7)), url('${newImageUrl}')`;
+                    }
+                } else if (targetId === 'about-us-section') {
+                    document.getElementById('about-title').textContent = formData.get('title');
+                    document.getElementById('about-text').textContent = formData.get('text');
+                } else if (targetId === 'contact-section') {
+                    document.getElementById('contact-title').textContent = formData.get('title');
+                    document.getElementById('contact-text').textContent = formData.get('text');
+                    document.getElementById('contact-email').textContent = formData.get('email');
+                    document.getElementById('contact-phone').textContent = formData.get('phone');
+                    document.getElementById('contact-address').textContent = formData.get('address');
+                }
+                editContentModal.classList.remove('active');
+            };
+        }
+
+        function addItem(type) {
+            const form = document.getElementById('edit-content-form');
+            let modalTitle = 'Ajouter un élément';
+            let fieldsHtml = '';
+            currentEditingItem = null; // Clear item context for 'add'
+
+            switch(type) {
+                case 'news-ads':
+                case 'gallery':
+                case 'activities':
+                case 'publications':
+                    modalTitle = `Ajouter une ${type === 'news-ads' ? 'nouvelle' : type === 'gallery' ? 'image' : type === 'activities' ? 'activité' : 'publication'}`;
+                    fieldsHtml = `
+                        <label for="item-title">Titre :</label>
+                        <input type="text" id="item-title" name="title" required>
+                        <label for="item-text">Description :</label>
+                        <textarea id="item-text" name="text" required></textarea>
+                        <label for="item-image">URL de l'image :</label>
+                        <input type="url" id="item-image" name="image" required>
+                    `;
+                    break;
+                case 'video':
+                    modalTitle = 'Ajouter une vidéo';
+                    fieldsHtml = `
+                        <label for="video-title">Titre :</label>
+                        <input type="text" id="video-title" name="title" required>
+                        <label for="video-url">URL Youtube (embed) :</label>
+                        <input type="url" id="video-url" name="url" required>
+                    `;
+                    break;
+            }
+
+            document.getElementById('modal-title').textContent = modalTitle;
+            form.innerHTML = fieldsHtml + '<button type="submit" class="save-button">Enregistrer</button>';
+            editContentModal.classList.add('active');
+            
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                // Simulate saving new item and refreshing the list
+                alert(`Nouvel élément de type '${type}' ajouté! (Action non-persistante)`);
+                editContentModal.classList.remove('active');
+                // In a real application, you would send this data to a server.
+            };
+        }
+
+        function editItem(type, itemId) {
+            currentEditingTarget = type;
+            currentEditingItem = itemId;
+            const form = document.getElementById('edit-content-form');
+            form.innerHTML = ''; // Clear existing form
+
+            // Get existing data based on item ID and type
+            let itemElement;
+            if (type === 'news-ads') itemElement = document.querySelector(`.news-ad-card[data-item-id="${itemId}"]`);
+            if (type === 'gallery') itemElement = document.querySelector(`.gallery-item[data-item-id="${itemId}"]`);
+            if (type === 'video') itemElement = document.querySelector(`.video-slide[data-item-id="${itemId}"]`);
+            if (type === 'activities') itemElement = document.querySelector(`.activity-card[data-item-id="${itemId}"]`);
+            if (type === 'publications') itemElement = document.querySelector(`.publication-item[data-item-id="${itemId}"]`);
+
+            if (!itemElement) return;
+
+            let modalTitle = `Modifier un élément`;
+            let fieldsHtml = '';
+
+            const title = itemElement.querySelector('h3 a, h3').textContent.trim();
+            const text = itemElement.querySelector('p') ? itemElement.querySelector('p').textContent.trim() : '';
+            const imageUrl = itemElement.querySelector('img') ? itemElement.querySelector('img').src : '';
+            const videoUrl = itemElement.querySelector('iframe') ? itemElement.querySelector('iframe').src : '';
+            const location = itemElement.querySelector('.location') ? itemElement.querySelector('.location').textContent.trim() : '';
+            const date = itemElement.querySelector('.date') ? itemElement.querySelector('.date').textContent.trim() : '';
+            
+            switch(type) {
+                case 'news-ads':
+                case 'gallery':
+                case 'publications':
+                    modalTitle = `Modifier la ${type === 'news-ads' ? 'nouvelle' : type === 'gallery' ? 'galerie' : 'publication'}`;
+                    fieldsHtml = `
+                        <label for="item-title">Titre :</label>
+                        <input type="text" id="item-title" name="title" value="${title}" required>
+                        <label for="item-text">Description :</label>
+                        <textarea id="item-text" name="text" required>${text}</textarea>
+                        <label for="item-image">URL de l'image :</label>
+                        <input type="url" id="item-image" name="image" value="${imageUrl}" required>
+                    `;
+                    break;
+                case 'video':
+                    modalTitle = 'Modifier la vidéo';
+                    fieldsHtml = `
+                        <label for="video-title">Titre :</label>
+                        <input type="text" id="video-title" name="title" value="${title}" required>
+                        <label for="video-url">URL Youtube (embed) :</label>
+                        <input type="url" id="video-url" name="url" value="${videoUrl}" required>
+                    `;
+                    break;
+                case 'activities':
+                    modalTitle = 'Modifier l\'activité';
+                    fieldsHtml = `
+                        <label for="activity-title">Titre :</label>
+                        <input type="text" id="activity-title" name="title" value="${title}" required>
+                        <label for="activity-text">Description :</label>
+                        <textarea id="activity-text" name="text" required>${text}</textarea>
+                        <label for="activity-image">URL de l'image :</label>
+                        <input type="url" id="activity-image" name="image" value="${imageUrl}" required>
+                        <label for="activity-location">Lieu :</label>
+                        <input type="text" id="activity-location" name="location" value="${location}" required>
+                        <label for="activity-date">Date :</label>
+                        <input type="text" id="activity-date" name="date" value="${date}" required>
+                    `;
+                    break;
+            }
+
+            document.getElementById('modal-title').textContent = modalTitle;
+            form.innerHTML = fieldsHtml + '<button type="submit" class="save-button">Enregistrer les modifications</button>';
+            editContentModal.classList.add('active');
+
+            form.onsubmit = (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+
+                // Update content in the DOM (this is for demo, a real app would update a database)
+                itemElement.querySelector('h3 a, h3').textContent = formData.get('title');
+                if (itemElement.querySelector('p')) itemElement.querySelector('p').textContent = formData.get('text');
+                if (itemElement.querySelector('img')) itemElement.querySelector('img').src = formData.get('image');
+                if (itemElement.querySelector('iframe')) itemElement.querySelector('iframe').src = formData.get('url');
+                if (itemElement.querySelector('.location')) itemElement.querySelector('.location').textContent = formData.get('location');
+                if (itemElement.querySelector('.date')) itemElement.querySelector('.date').textContent = formData.get('date');
+                
+                alert(`Élément '${itemId}' de type '${type}' mis à jour! (Action non-persistante)`);
+                editContentModal.classList.remove('active');
+            };
+        }
+
+        function deleteItem(type, itemId) {
+            if (confirm(`Êtes-vous sûr de vouloir supprimer l'élément ID ${itemId} de la section ${type}?`)) {
+                // Simulate deletion
+                const itemElement = document.querySelector(`[data-item-id="${itemId}"]`);
+                if (itemElement) {
+                    itemElement.remove();
+                    alert(`Élément ID ${itemId} de la section ${type} a été supprimé. (Action non-persistante)`);
+                }
+            }
+        }
+
+        // --- Initialize Swiper Carousels ---
+        document.addEventListener('DOMContentLoaded', function() {
+            // News Carousel
+            new Swiper('.news-ads-carousel', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                },
+            });
+
+            // Video Carousel
+            new Swiper('.video-carousel', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
+
+            // Activities Carousel
+            new Swiper('.activities-carousel', {
+                slidesPerView: 1,
+                spaceBetween: 30,
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                breakpoints: {
+                    640: {
+                        slidesPerView: 2,
+                        spaceBetween: 20,
+                    },
+                    1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                    },
+                },
+            });
+
+            // Intersection Observer for animations
+            const sections = document.querySelectorAll('.content-section');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
