@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Coordination Nationale Des Flambeaux- lumières CMA CI</title>
+    <style>
+        /* Responsive & styles principaux */
+        body { font-family: 'Poppins', sans-serif; margin:0; background:#F8FBF8; color:#2C3E2C; }
+        header, footer { background:#1A5319; color:#fff; padding:1em; text-align:center; }
+        .container { max-width:1200px; margin:auto; padding:1em; }
+        .admin { background:#e6ffe6; border:2px dashed #4CAF50; }
+        h1, h2 { color:#1A5319; }
+        img, video, iframe { max-width:100%; height:auto; display:block; border-radius:8px; }
+        .menu { display:flex; gap:1em; flex-wrap:wrap; justify-content:center; margin:1em 0; }
+        .menu a { color:#fff; text-decoration:none; padding:0.5em 1em; border-radius:5px; background:#123C12;}
+        .menu a:hover { background:#FFC107; color:#1A5319;}
+        .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1em;}
+        .card { background:#fff; border-radius:8px; box-shadow:0 2px 8px #0001; padding:1em; position:relative;}
+        .admin-btns { position:absolute; top:5px; right:5px; display:flex; gap:5px;}
+        .admin-btns button { background:#FFC107; border:none; border-radius:4px; padding:0.3em 0.7em; cursor:pointer;}
+        .admin-btns button:hover { background:#e0a800;}
+        @media(max-width:600px){
+            .grid { grid-template-columns:1fr; }
+            header, footer { font-size:0.95em; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 id="site-title">Coordination Nationale Des Flambeaux- lumières CMA CI</h1>
+        <div class="menu">
+            <a href="#news">Actualités</a>
+            <a href="#gallery">Galerie</a>
+            <a href="#videos">Vidéos</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <button id="admin-login-btn" style="background:#FFC107;color:#1A5319; border:none; border-radius:5px; padding:0.3em 1em;margin-top:5px;">Mode Admin</button>
+    </header>
+
+    <div class="container">
+        <!-- ACTUALITES -->
+        <section id="news" class="grid"></section>
+        <!-- GALERIE -->
+        <section id="gallery" class="grid"></section>
+        <!-- VIDEOS -->
+        <section id="videos" class="grid"></section>
+        <!-- CONTACT -->
+        <section id="contact" style="margin-top:2em;">
+            <h2>Contact</h2>
+            <div id="contact-content"></div>
+        </section>
+    </div>
+
+    <footer>
+        <div id="footer-content">© 2025 Coordination Nationale Des Flambeaux- lumières CMA CI.</div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal-bg" style="display:none; position:fixed;top:0;left:0;width:100vw;height:100vh;background:#0005;z-index:999;align-items:center;justify-content:center;">
+        <div id="modal" style="background:#fff;padding:1.5em;border-radius:8px;min-width:250px;max-width:95vw;position:relative;">
+            <span id="modal-close" style="position:absolute;top:7px;right:12px;cursor:pointer;font-weight:bold;">&times;</span>
+            <h3 id="modal-title"></h3>
+            <form id="modal-form"></form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (REMPLACE LES INFOS PAR LES TIENNES !) -->
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore-compat.js"></script>
+    <script>
+    // Remplace par TES INFOS FIREBASE !
+    const firebaseConfig = {
+        apiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+        authDomain: "XXXXXXXXXX.firebaseapp.com",
+        projectId: "XXXXXXXXXX",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    </script>
+
+    <!-- Fonctionnalités principales -->
+    <script>
+    // --- CONFIGURABLE ---
+    const ADMIN_PASSWORD = "454101"; // Change ici si tu veux un autre mot de passe
+
+    // --- Données dynamiques ---
+    let isAdmin = false;
+    const sectionDefs = [
+        {id:'news', title:'Actualités', fields:[{n:'title',t:'Titre'},{n:'desc',t:'Texte'},{n:'img',t:'Image (URL)'}]},
+        {id:'gallery', title:'Galerie', fields:[{n:'title',t:'Titre'},{n:'img',t:'Image (URL)'}]},
+        {id:'videos', title:'Vidéos', fields:[{n:'title',t:'Titre'},{n:'vid',t:'Lien Youtube embed'}]},
+        {id:'contact', title:'Contact', fields:[{n:'email',t:'Email'},{n:'phone',t:'Téléphone'},{n:'address',t:'Adresse'}],unique:true}
+    ];
+
+    // --- UI Helper ---
+    function showModal(title, fields, submitCb, values={}) {
+        document.getElementById('modal-bg').style.display='flex';
+        document.getElementById('modal-title').textContent=title;
+        const form = document.getElementById('modal-form');
+        form.innerHTML='';
+        fields.forEach(f=>{
+            form.innerHTML += `<label>${f.t}<br><input type="text" name="${f.n}" value="${values[f.n]||""}" required style="width:98%"></label><br>`;
+        });
+        form.innerHTML += `<button type="submit" style="margin-top:1em;">Enregistrer</button>`;
+        form.onsubmit = e => {e.preventDefault(); 
+            let res={}; fields.forEach(f=>res[f.n]=form[f.n].value.trim());
+            document.getElementById('modal-bg').style.display='none';
+            submitCb(res);
+        };
+    }
+    document.getElementById('modal-close').onclick=()=>document.getElementById('modal-bg').style.display='none';
+
+    // --- Login Admin ---
+    document.getElementById('admin-login-btn').onclick=()=>{
+        if(isAdmin){ isAdmin=false; renderAll(); return;}
+        showModal("Mot de passe Admin",[{n:'pass',t:'Entrer le mot de passe'}],val=>{
+            if(val.pass===ADMIN_PASSWORD){ isAdmin=true; renderAll();}
+            else alert("Mot de passe incorrect.");
+        });
+    };
+
+    // --- Affichage/Rendu ---
+    function renderAll(){
+        sectionDefs.forEach(s=>renderSection(s));
+        renderContact();
+        document.getElementById('admin-login-btn').textContent = isAdmin ? "Quitter Admin" : "Mode Admin";
+    }
+
+    function renderSection(s){
+        if(s.unique) return; // exclue contact
+        const cont = document.getElementById(s.id); if(!cont) return;
+        db.collection(s.id).orderBy("created","desc").get().then(qs=>{
+            let html='';
+            qs.forEach(doc=>{
+                const d = doc.data(), id=doc.id;
+                html+=`<div class="card${isAdmin?' admin':''}">
+                    ${isAdmin?`
+                    <div class="admin-btns">
+                    <button onclick="editItem('${s.id}','${id}')">✏️</button>
+                    <button onclick="deleteItem('${s.id}','${id}')">🗑️</button>
+                    </div>`:''}
+                    <h3>${d.title||''}</h3>
+                    ${d.img?`<img src="${d.img}" alt="img">`:''}
+                    ${d.desc?`<p>${d.desc}</p>`:''}
+                    ${d.vid?`<iframe src="${d.vid}" frameborder="0" allowfullscreen></iframe>`:''}
+                </div>`;
+            });
+            if(isAdmin) html+=`<div class="card admin"><button onclick="addItem('${s.id}')">➕ Ajouter</button></div>`;
+            cont.innerHTML=html||"<p>Aucun contenu.</p>";
+        });
+    }
+
+    function renderContact() {
+        const cont = document.getElementById('contact-content');
+        db.collection('contact').limit(1).get().then(qs=>{
+            let html='';
+            if(!qs.empty){
+                const d=qs.docs[0].data(),id=qs.docs[0].id;
+                html+=`<p><b>Email:</b> <a href="mailto:${d.email}">${d.email||''}</a></p>
+                <p><b>Tél:</b> <a href="tel:${d.phone}">${d.phone||''}</a></p>
+                <p><b>Adresse:</b> ${d.address||''}</p>`;
+                if(isAdmin) html+=`<div class="admin-btns"><button onclick="editItem('contact','${id}')">✏️</button></div>`;
+            } else if(isAdmin) {
+                html+=`<button onclick="addItem('contact')">➕ Ajouter contact</button>`;
+            }
+            cont.innerHTML=html||"<p>Aucun contact.</p>";
+        });
+    }
+
+    // --- Edition CRUD ---
+    window.addItem = function(section){
+        const s = sectionDefs.find(x=>x.id===section);
+        showModal("Ajouter "+s.title,s.fields,vals=>{
+            vals.created = Date.now();
+            if(s.unique)
+                db.collection(section).doc("unique").set(vals).then(renderAll);
+            else
+                db.collection(section).add(vals).then(renderAll);
+        });
+    };
+    window.editItem = function(section, id){
+        const s = sectionDefs.find(x=>x.id===section);
+        db.collection(section).doc(id).get().then(doc=>{
+            showModal("Modifier "+s.title,s.fields,vals=>{
+                vals.created=doc.data().created||Date.now();
+                db.collection(section).doc(id).set(vals).then(renderAll);
+            }, doc.data());
+        });
+    }
+    window.deleteItem = function(section,id){
+        if(confirm("Supprimer cet élément ?"))
+            db.collection(section).doc(id).delete().then(renderAll);
+    }
+
+    // --- Initialisation ---
+    renderAll();
+    </script>
+</body>
+</html>
